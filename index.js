@@ -1,8 +1,11 @@
 const express = require('express');
+const bodyParser = require('body-parser');
 const app = express();
 
-const { config } = require('./config');
-const platziStore = require('./routes')
+const { config } = require('./src/config');
+const platziStore = require('./src/routes')
+
+app.use(bodyParser.json());
 
 app.get('/', (req, res) => {
   let userInfo = req.header("user-agent");

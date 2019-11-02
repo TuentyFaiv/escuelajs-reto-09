@@ -19,8 +19,56 @@ const platziStore = (app) => {
   });
 
   router.get('/products', async (req, res, next) => {
-    const storeProducts = await productService.getProducts()
-    res.status(200).json(storeProducts);
+    const { tags } = req.query;
+    const storeProducts = await productService.getProducts({ tags });
+    res.status(200).json({
+      data: storeProducts,
+      message: 'products listed'
+    });
+  });
+
+  router.get('/products/:productId', async (req, res, next) => {
+    const { productId } = req.params;
+
+    const product = await productService.getProduct({ productId });
+    res.status(200).json({
+      data: product,
+      message: 'product listed'
+    });
+  });
+
+  router.post('/products/new', async (req, res, next) => {
+    const { body: product } = req;
+
+    const createProductId = await productService.createProduct({ product });
+    res.status(201).json({
+      data: createProductId,
+      message: 'product created'
+    });
+  });
+
+  router.put('/products/:productId', async (req, res, next) => {
+    const { productId } = req.params;
+    const { body: product } = req;
+
+    const updatedProductId = await productService.updateProduct({
+      productId,
+      product
+    });
+    res.status(200).json({
+      data: updatedProductId,
+      message: 'product updated'
+    });
+  });
+
+  router.delete('/products/:productId', async (req, res, next) => {
+    const { productId } = req.params;
+
+    const deletedProduct = await productService.deleteProduct({ productId });
+    res.status(200).json({
+      data: deletedProduct,
+      message: 'product deleted'
+    });
   });
 
   router.get('*', (req, res) => {
